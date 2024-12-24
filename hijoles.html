@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo HTML</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #000;
+            color: #00FF00;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .status {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+        p, .status {
+            text-align: left;
+            width: 100%;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px;
+        }
+        .loading {
+            display: inline-block;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Estado del Dispositivo</h1>
+        <p id="procesando" class="hidden">Procesando<span class="loading" id="loading-procesando">...</span> <span id="percentage-procesando">0%</span></p>
+        <p id="conectando" class="hidden">Conectando IP<span class="loading" id="loading-conectando">...</span> <span id="percentage-conectando">0%</span></p>
+        <p id="cargando" class="hidden">Cargando<span class="loading" id="loading-cargando">...</span> <span id="percentage-cargando">0%</span></p>
+        <p id="ip" class="hidden">IP del dispositivo conectado</p>
+        <div id="estado" class="status hidden">
+            Estado: Activo WhatsApp
+        </div>
+    </div>
+
+    <script>
+        const messages = ["procesando", "conectando", "cargando", "ip", "estado"];
+        let index = 0;
+        let loadingIndex = 0;
+
+        function updateLoadingDots(elementId) {
+            const dots = ['...', '.. ', '.  ', '   '];
+            document.getElementById(elementId).innerText = dots[loadingIndex];
+            loadingIndex = (loadingIndex + 1) % dots.length;
+        }
+
+        function showMessage() {
+            if (index < messages.length) {
+                document.getElementById(messages[index]).classList.remove("hidden");
+                if (index < 3) {
+                    const loadingId = `loading-${messages[index]}`;
+                    const percentageId = `percentage-${messages[index]}`;
+                    const loadingInterval = setInterval(() => updateLoadingDots(loadingId), 500);
+                    setTimeout(() => {
+                        clearInterval(loadingInterval);
+                        document.getElementById(percentageId).innerText = '100%';
+                        index++;
+                        showMessage();
+                    }, 5000); // 5000 milisegundos = 5 segundos
+                } else {
+                    index++;
+                    showMessage();
+                }
+            }
+        }
+
+        // Iniciar la función para mostrar los mensajes
+        showMessage();
+
+        // Redirigir a la página de broma si la URL contiene el enlace de TikTok
+        if (window.location.href.includes('https://vm.tiktok.com/ZMkruJEJR/')) {
+            window.location.href = 'https://vm.tiktok.com/ZMkruJEJR/';
+        }
+    </script>
+</body>
+</html>
